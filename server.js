@@ -31,7 +31,12 @@ connect((err, db) => {
     
     fs.readdirSync(__dirname + '/routes').map(route => {
         let name = route.substr(0, route.indexOf('.'))
-        require('/routes/' + name)(app, db)
+        require('./routes/' + name)(app, db)
+    })
+
+    // Ping the server
+    app.get('/', (req,res) => {
+        return res.json({serverWorkingFine: true})
     })
     
     app.listen(PORT, () => {
