@@ -1,4 +1,5 @@
 const chalk = require('chalk')
+const md5 = require('md5')
 
 module.exports = (app, db) => {
 
@@ -51,11 +52,12 @@ module.exports = (app, db) => {
 
         let {fname, lname, email, password, designation, profile_photo} = req.body
         
+        
         let userInfo = {
             'fname' : fname,
             'lname' : lname,
             'email' : email,
-            'password' : password,
+            'password' : md5(password),
             'designation' : designation,
             'profile_photo' : profile_photo,
         }
@@ -64,12 +66,16 @@ module.exports = (app, db) => {
                 console.log(chalk.bgRed('Error while creating new user'))
                 res.status(400).json({error: 'Bad request for user creation'})
             }
+            console.log(chalk.gray('Created a new user succesfully with credentials', data.ops[0]))
+            console.log(data)
             return res.status(200).json({
                 userInserted: data.ops[0],
                 success : data.result.n && data.result.ok
+                })
             })
         })
-    })
+        
+
 
 
     /******************** 
